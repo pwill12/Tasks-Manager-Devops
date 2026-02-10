@@ -4,9 +4,9 @@ name: build-and-checkcode
 # trigger on push or pull request to these branches
 on:
   push:
-    branches: [main, dev]
+    branches: [main]
   pull_request:
-    branches: [main, dev]
+    branches: [main]
 
     # define a job (multiple jobs also)
 jobs:

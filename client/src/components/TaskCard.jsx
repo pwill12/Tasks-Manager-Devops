@@ -18,8 +18,6 @@ const TaskCard = ({ task, onDelete }) => {
     }
   };
 
-  const checkerror = ''
-
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
       <div className="flex justify-between items-start">
