@@ -8,6 +8,8 @@ const getAllTasks = async (req, res) => {
       success: true,
       count: tasks.length,
       data: tasks,
+      pod: process.env.POD_NAME || 'unknown',
+      time: new Date().toISOString(),
     });
   } catch (error) {
     console.error('Error fetching tasks:', error);
