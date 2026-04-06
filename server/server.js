@@ -67,4 +67,8 @@ process.on('SIGINT', async () => {
   process.exit(0);
 });
 
+afterAll(() => {
+  app.close(done);
+});
+
 module.exports = app;
