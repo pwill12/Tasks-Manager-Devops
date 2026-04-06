@@ -67,8 +67,4 @@ process.on('SIGINT', async () => {
   process.exit(0);
 });
 
-afterAll(() => {
-  mongoose.connection.close();
-});
-
 module.exports = app;
