@@ -1,0 +1,50 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./backend
+          push: true
+          tags: pwill12/task-devops-backend:latest
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./frontend
+          push: true
+          tags: pwill12/task-devops-frontend:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl apply -f k8s/namespaces/namespaces.yaml
+          kubectl apply -f k8s/backend/ -n backend-prod
+          kubectl apply -f k8s/frontend/ -n frontend-prod
+          kubectl rollout restart deployment task-devops-backend -n backend-prod
+          kubectl rollout restart deployment task-devops-frontend -n frontend-prod

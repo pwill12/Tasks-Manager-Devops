@@ -8,6 +8,13 @@ USERNAME="pwill12"
 TAG="latest"
 IMAGE="$USERNAME/$NAME:$TAG"
 
+# Check if Docker is running
+if ! docker info >/dev/null 2>&1; then
+    echo "❌ Error: Docker is not running!"
+    echo "   Please start Docker Desktop and try again."
+    exit 1
+fi
+
 # Ensure minikube is running
 echo "Checking minikube status..."
 if ! minikube status &>/dev/null; then
