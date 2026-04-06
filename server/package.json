@@ -8,7 +8,7 @@
     "dev": "nodemon server.js",
     "dev:docker": "wsl bash ./scripts/dev.sh",
     "prod:docker": "wsl bash ./scripts/prod.sh",
-    "test": "jest --detectOpenHandles",
+    "test": "jest --detectOpenHandles --forceExit",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "prettier --write ."
