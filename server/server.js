@@ -5,6 +5,10 @@ const dotenv = require('dotenv');
 const taskRoutes = require('./routes/tasks');
 
 // Load environment variables
+// dotenv.config({
+//   path: `.env.${process.env.NODE_ENV || 'development'}`
+// });
+
 dotenv.config();
 
 const app = express();
@@ -19,8 +23,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/tasks', taskRoutes);
 
 // Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({ message: 'Server is running!' });
+app.get('/readyz', (req, res) => {
+  res.status(200).json({ message: 'ready' });
+});
+
+// Health check endpoint
+app.get('/healthz', (req, res) => {
+  res.status(200).json({ message: 'ok' });
 });
 
 // Error handling middleware
@@ -31,7 +40,7 @@ app.use((err, req, res, next) => {
 
 // 404 handler
 app.use('*', (req, res) => {
-  res.status(404).json({ message: 'Route found' });
+  res.status(404).json({ message: 'Route not found' });
 });
 
 // Database connection
@@ -57,3 +66,5 @@ process.on('SIGINT', async () => {
   await mongoose.connection.close();
   process.exit(0);
 });
+
+module.exports = app;
