@@ -5,11 +5,11 @@ const dotenv = require('dotenv');
 const taskRoutes = require('./routes/tasks');
 
 // Load environment variables
-// dotenv.config({
-//   path: `.env.${process.env.NODE_ENV || 'development'}`
-// });
+dotenv.config({
+  path: `.env.${process.env.NODE_ENV || 'development'}`
+});
 
-dotenv.config();
+// dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8000;

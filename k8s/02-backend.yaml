@@ -1,35 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: task-devops-backend
+  name: backend
+  namespace: task-devops
   labels:
-    app: task-devops-backend
+    app: backend
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: task-devops-backend
+      app: backend
   template:
     metadata:
       labels:
-        app: task-devops-backend
+        app: backend
     spec:
       containers:
-        - name: task-devops-backend
-          image: pwill12/task-devops-backend:latest
-          imagePullPolicy: Always
+        - name: backend
+          image: backend:local
+          imagePullPolicy: Never
           ports:
             - containerPort: 8000
           env:
             - name: MONGO_URI
-              valueFrom:
-                secretKeyRef:
-                  name: mongo-secret
-                  key: MONGO_URI
-            - name: PORT
-              value: "8000"
+              value: "mongodb://mongo-service:27017/task-devops"
             - name: NODE_ENV
-              value: 'production'
+              value: "development"
             - name: POD_NAME
               valueFrom:
                 fieldRef:
@@ -51,5 +47,20 @@ spec:
             httpGet:
               path: /healthz
               port: 8000
-            initialDelaySeconds: 10
+            initialDelaySeconds: 15
             periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+  namespace: task-devops
+  labels:
+    app: backend
+spec:
+  selector:
+    app: backend
+  ports:
+    - port: 8000
+      targetPort: 8000
+  type: NodePort
